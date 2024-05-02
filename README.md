@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# House Market Place
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A react application for finding and listing the house for sale and renting this is a React/ Firebase v10.
 
 ## Available Scripts
 
