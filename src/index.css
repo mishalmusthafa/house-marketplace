@@ -8,6 +8,7 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #f2f4f8;
@@ -150,7 +151,7 @@ button {
 .navbar {
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: 0px;
   right: 0;
   height: 85px;
   background-color: #ffffff;
@@ -159,6 +160,8 @@ button {
   justify-content: center;
   align-items: center;
 }
+
+
 
 .navbarNav {
   width: 100%;
@@ -195,24 +198,27 @@ button {
   color: #2c2c2c;
 }
 
-.nameInput {
-  margin-bottom: 2rem;
-  background: url('./assets/svg/badgeIcon.svg') #ffffff 2.5% center no-repeat;
-}
-
-.emailInput {
-  margin-bottom: 2rem;
-  background: url('./assets/svg/personIcon.svg') #ffffff 2.5% center no-repeat;
-}
-
+.nameInputDiv,
+.emailInputDiv,
 .passwordInputDiv {
   position: relative;
 }
 
+.nameInputIcon,
+.emailInputIcon,
+.passwordInputIcon {
+  position: absolute;
+  top: -8%;
+  left: 0.5%;
+  padding: 1rem;
+}
+
+.nameInput,
+.emailInput,
 .passwordInput {
   margin-bottom: 2rem;
-  background: url('./assets/svg/lockIcon.svg') #ffffff 2.5% center no-repeat;
 }
+
 
 .showPassword {
   cursor: pointer;
@@ -222,11 +228,18 @@ button {
   padding: 1rem;
 }
 
+.forgotPasswordFlex {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+}
+
 .forgotPasswordLink {
   cursor: pointer;
   color: #00cc66;
   font-weight: 600;
   text-align: right;
+  display: inline-block;
 }
 
 .signInBar,
@@ -846,4 +859,8 @@ button {
   margin-left: 1rem;
   font-size: 0.8rem;
   opacity: 0.75;
+}
+
+footer {
+  height: 82px;
 }

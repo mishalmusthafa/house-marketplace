@@ -5,46 +5,47 @@ import { ReactComponent as PersonOutlineIcon } from '../assets/svg/personOutline
 
 function Navbar() {
   return (
-    <footer className='navbar'>
-      <nav className="navbarNav">
-        <ul className='navbarListItems'>
+    <footer >
+      <div className="navbar">
+        <nav className="navbarNav">
+          <ul className='navbarListItems'>
 
-          <li className="navbarListItem">
-            <NavLink to='/' >
-              {({ isActive }) => (
-                <>
-                  <ExploreIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
-                  <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Explore</p>
-                </>
-              )}
-            </NavLink>
-          </li>
+            <li className="navbarListItem">
+              <NavLink to='/' >
+                {({ isActive }) => (
+                  <>
+                    <ExploreIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
+                    <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Explore</p>
+                  </>
+                )}
+              </NavLink>
+            </li>
 
-          <li className="navbarListItem">
-            <NavLink to="/offers">
-              {({ isActive }) => (
-                <>
-                  <OfferIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
-                  <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Offer</p>
-                </>
-              )}
-            </NavLink>
-          </li>
+            <li className="navbarListItem">
+              <NavLink to="/offers">
+                {({ isActive }) => (
+                  <>
+                    <OfferIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
+                    <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Offer</p>
+                  </>
+                )}
+              </NavLink>
+            </li>
 
-          <li className="navbarListItem">
-            <NavLink to="/profile">
-              {({ isActive }) => (
-                <>
-                  <PersonOutlineIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
-                  <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Profile</p>
-                </>
-              )}
-            </NavLink>
-          </li>
+            <li className="navbarListItem">
+              <NavLink to="/profile">
+                {({ isActive }) => (
+                  <>
+                    <PersonOutlineIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
+                    <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Profile</p>
+                  </>
+                )}
+              </NavLink>
+            </li>
 
-        </ul>
-      </nav>
-
+          </ul>
+        </nav>
+      </div>
     </footer>
   );
 }
