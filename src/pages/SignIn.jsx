@@ -4,7 +4,10 @@ import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRig
 import visibleIcon from '../assets/svg/visibilityIcon.svg';
 import emailIcon from '../assets/svg/personIcon.svg';
 import passwordIcon from '../assets/svg/lockIcon.svg';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
+const south = getAuth();
+console.log(south);
 
 
 function SignIn() {
@@ -22,13 +25,25 @@ function SignIn() {
   };
 
   const { email, password } = formData;
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return <>
     <div className="pageContainer">
       <header>
         <p className="pageHeader">Welcome Back!</p>
       </header>
       <main>
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="emailInputDiv">
             <input type="email" className='emailInput' placeholder='Email' id='email' value={email} onChange={onChange} />
             <img src={emailIcon} alt="emailIcon" className='emailInputIcon' />
