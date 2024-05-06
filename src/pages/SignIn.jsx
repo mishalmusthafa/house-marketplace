@@ -1,14 +1,11 @@
+import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Link, useNavigation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibleIcon from '../assets/svg/visibilityIcon.svg';
 import emailIcon from '../assets/svg/personIcon.svg';
 import passwordIcon from '../assets/svg/lockIcon.svg';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
-const south = getAuth();
-console.log(south);
-
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +13,7 @@ function SignIn() {
     email: '',
     password: ''
   });
-
+  const navigate = useNavigate();
   const onChange = (e) => {
     setFormData({
       ...formData,
@@ -31,9 +28,23 @@ function SignIn() {
     try {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
+      if (userCredential.user) {
+        navigate('/');
+      }
     } catch (error) {
-      console.log(error);
+      switch (error.code) {
+        case 'auth/invalid-email':
+          toast.error('Enter Email ');
+          break;
+        case 'auth/missing-password':
+          toast.error('Enter the password ');
+          break;
+        case 'auth/invalid-credential':
+          toast.error('Invalid user name or password ');
+          break;
+        default:
+          toast.error('Bad User Credentials');
+      }
     }
   };
 

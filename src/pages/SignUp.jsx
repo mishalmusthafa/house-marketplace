@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
@@ -47,6 +48,22 @@ function SignUp() {
 
       navigator('/');
     } catch (error) {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          toast.error('Enter Email ');
+          break;
+        case 'auth/missing-password':
+          toast.error('Enter the password ');
+          break;
+        case 'auth/invalid-credential':
+          toast.error('Invalid user name or password ');
+          break;
+        case 'auth/email-already-in-use':
+          toast.error('Email already exist');
+          break;
+        default:
+          toast.error('Bad User Credentials');
+      }
       console.log(error);
     }
 
