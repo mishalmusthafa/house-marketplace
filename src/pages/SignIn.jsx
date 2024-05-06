@@ -69,7 +69,7 @@ function SignIn() {
           </div>
 
           <div className="forgotPasswordFlex">
-            <Link to='forgot-password' className='forgotPasswordLink'>Forgot Password</Link>
+            <Link to='/forgot-password' className='forgotPasswordLink'>Forgot Password</Link>
           </div>
 
           <div className="signInBar">
