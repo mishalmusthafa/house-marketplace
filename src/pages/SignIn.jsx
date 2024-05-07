@@ -6,6 +6,7 @@ import visibleIcon from '../assets/svg/visibilityIcon.svg';
 import emailIcon from '../assets/svg/personIcon.svg';
 import passwordIcon from '../assets/svg/lockIcon.svg';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import OAuth from '../components/OAuth';
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -79,7 +80,9 @@ function SignIn() {
             </button>
           </div>
         </form>
-        {/* Google o Auth */}
+
+        <OAuth />
+
         <Link to='/sign-up' className='registerLink'>Sign Up Instead</Link>
       </main>
     </div>
