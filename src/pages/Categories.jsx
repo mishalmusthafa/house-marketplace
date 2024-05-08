@@ -5,6 +5,7 @@ import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 import { list } from 'firebase/storage';
+import ListingItem from '../components/ListingItem';
 
 function Categories() {
   const [loading, setLoading] = useState(true);
@@ -34,7 +35,6 @@ function Categories() {
         const listings = [];
 
         querySnap.forEach((doc) => {
-          console.log(doc.data());
           return listings.push({
             id: doc.id,
             data: doc.data()
@@ -64,7 +64,7 @@ function Categories() {
           <main>
             <ul className="categoryListings">
               {listings.map((listing) => (
-                <h3 key={listing.id}>{listing.data.name}</h3>
+                <ListingItem listing={listing.data} id={listing.id} key={listing.id} />
               ))}
             </ul>
           </main>
