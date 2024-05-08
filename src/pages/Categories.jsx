@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, getDocs, query, where, orderBy, limit, startAfter } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, limit, startAfter, } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
@@ -8,7 +8,7 @@ import { list } from 'firebase/storage';
 
 function Categories() {
   const [loading, setLoading] = useState(true);
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState(null);
 
   const params = useParams();
 
@@ -17,6 +17,8 @@ function Categories() {
       try {
         // Get reference
         const listingsRef = collection(db, 'listings');
+
+
 
         // Create a query
         const q = query(
@@ -32,11 +34,13 @@ function Categories() {
         const listings = [];
 
         querySnap.forEach((doc) => {
-          listings.push({
+          console.log(doc.data());
+          return listings.push({
             id: doc.id,
             data: doc.data()
           });
         });
+
         setListings(listings);
         setLoading(false);
       } catch (error) {
@@ -55,15 +59,13 @@ function Categories() {
     </header>
     {loading ?
       <Spinner /> :
-      listings.length > 0 ?
+      listings && listings.length > 0 ?
         <>
           <main>
-            {console.log(listings)}
             <ul className="categoryListings">
-              {listings.map((listing) => {
-                console.log(listing.data.name);
-                <p>{listing.data.name}</p>;
-              })}
+              {listings.map((listing) => (
+                <h3 key={listing.id}>{listing.data.name}</h3>
+              ))}
             </ul>
           </main>
         </>
