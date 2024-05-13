@@ -4,8 +4,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoutes from './components/PrivateRoutes';
 import Explore from './pages/Explore';
-import Categories from './pages/Categories';
+import Category from './pages/Category';
 import ForgotPassword from './pages/ForgotPassword';
+import Listing from './pages/Listing';
 import Offers from './pages/Offers';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
@@ -19,7 +20,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Explore />} />
           <Route path='/offers' element={<Offers />} />
-          <Route path='/categories/:categoryName' element={<Categories />} />
+          <Route path='/category/:categoryName' element={<Category />} />
+          <Route path='/category/:categoryName/:listingId' element={<Listing />} />
           <Route path='/profile' element={<PrivateRoutes />}>
             <Route path='/profile' element={<Profile />} />
           </Route>

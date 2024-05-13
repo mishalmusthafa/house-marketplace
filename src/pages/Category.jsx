@@ -7,7 +7,7 @@ import Spinner from '../components/Spinner';
 import { list } from 'firebase/storage';
 import ListingItem from '../components/ListingItem';
 
-function Categories() {
+function Category() {
   const [loading, setLoading] = useState(true);
   const [listings, setListings] = useState(null);
 
@@ -72,4 +72,4 @@ function Categories() {
   </div>;
 }
 
-export default Categories;
+export default Category;
