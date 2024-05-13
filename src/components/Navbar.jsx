@@ -26,7 +26,7 @@ function Navbar() {
                 {({ isActive }) => (
                   <>
                     <OfferIcon fill={isActive ? '#2c2c2c' : '#8f8f8f'} width='36px' height='36px' />
-                    <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Offer</p>
+                    <p className={isActive ? 'navbarListItemNameActive' : 'navbarListItemName'}>Offers</p>
                   </>
                 )}
               </NavLink>

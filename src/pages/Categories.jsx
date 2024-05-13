@@ -19,8 +19,6 @@ function Categories() {
         // Get reference
         const listingsRef = collection(db, 'listings');
 
-
-
         // Create a query
         const q = query(
           listingsRef,
@@ -48,7 +46,7 @@ function Categories() {
       }
     };
     fetchListings();
-  }, []);
+  }, [params.categoryName]);
 
 
   return <div className='category'>

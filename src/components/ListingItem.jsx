@@ -4,10 +4,11 @@ import bedIcon from '../assets/svg/bedIcon.svg';
 import bathtubIcon from '../assets/svg/bathtubIcon.svg';
 
 function ListingItem({ listing, id, onDelete }) {
+  console.log(listing);
 
   return <li className='categoryListing'>
     <Link to={`/category/${listing.type}/${id}`} className='categoryListingLink'>
-      <img src={listing.imageUrls[0]} alt="" className='categoryListingImg' />
+      <img src={listing.imgUrls[0]} alt="{listing.name}" className='categoryListingImg' />
       <div className="categoryListingDetails">
         <p className="categoryListingLocation">{listing.location}</p>
         <p className="categoryListingName">{listing.name}</p>

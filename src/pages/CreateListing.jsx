@@ -1,10 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAuth, onAuthStateChanged, } from 'firebase/auth';
+import { v4 as uuidV4 } from 'uuid';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
+import { toast } from 'react-toastify';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase.config';
+
+
 
 function CreateListing() {
-  const [geoLocationEnabled, setGeoLocationEnabled] = useState(true);
+  const APIKEY = process.env.REACT_APP_API_KEY;
+  const [geoLocationEnabled, setGeoLocationEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: 'rent',
@@ -22,23 +30,6 @@ function CreateListing() {
     longitude: 0,
   });
 
-
-  const auth = getAuth();
-  const navigate = useNavigate();
-  const isMounted = useRef(true);
-
-  useEffect(() => {
-    if (isMounted) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setFormData({ ...formData, userRef: user.uid });
-        } else {
-          navigate('/sign-in');
-        }
-      });
-    }
-  }, [isMounted]);
-
   const {
     type,
     name,
@@ -55,9 +46,132 @@ function CreateListing() {
     longitude,
   } = formData;
 
-  const onSubmit = (e) => {
+
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    if (isMounted) {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setFormData({ ...formData, userRef: user.uid });
+        } else {
+          navigate('/sign-in');
+        }
+      });
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [isMounted]);
+
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    setLoading(true);
+
+    // Validations
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error('Discount price should be less than regular price');
+      return;
+    }
+
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error('Max 6 images');
+      return;
+    }
+
+    // GeoLocation
+    let geolocation = {};
+    let location;
+
+    if (geoLocationEnabled) {
+      const response = await fetch(
+        `http://api.positionstack.com/v1/forward?access_key=017ccb6624d4779d8ef8167ddf6c0603&query=1600 Pennsylvania Ave NW, Washington DC`
+      );
+
+      const data = await response.json();
+      geolocation.lat = data.result[0]?.geometry.location.lat ?? 0;
+      geolocation.lng = data.result[0]?.geometry.location.lng ?? 0;
+      location = data.status === 'ZERO_RESULTS' ? undefined : data.results[0]?.formatted_address;
+
+      if (location === undefined || location.includes('undefined')) {
+        setLoading(false);
+        toast.error('Enter a valid Address');
+        return;
+      }
+
+    } else {
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
+    }
+
+    //Store images in firebase
+    const storeImage = async (image) => {
+      console.log(image);
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidV4()}`;
+        const storageRef = ref(storage, 'images/' + fileName);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on('state_changed',
+          (snapshot) => {
+
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            reject(error);
+          },
+          () => {// Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+
+    };
+
+    const imgUrls = await Promise.all(
+      [...images].map((image) => storeImage(image).catch(() => {
+        setLoading(false);
+        toast.error('image not uploaded');
+        return;
+      }))
+    );
+
+    // Store listing to firebase
+    const formDataCopy = {
+      ...formData,
+      imgUrls,
+      geolocation,
+      timestamp: serverTimestamp()
+    };
+
+    formDataCopy.location= address
+    delete formDataCopy.images;
+    delete formDataCopy.address;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+    const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
+    setLoading(false);
+    toast.success('Listing Saved');
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
   const onMutate = (e) => {
@@ -86,7 +200,6 @@ function CreateListing() {
         [e.target.id]: boolean ?? e.target.value
       });
     }
-
   };
 
   if (loading) {
@@ -119,11 +232,11 @@ function CreateListing() {
           <div className="formRooms flex">
             <div>
               <label className="formLabel">Bedrooms</label>
-              <input type="number" className="formInputSmall" id='bedrooms' value={bedrooms} onChange={onMutate} min='1' max='80' required />
+              <input type='number' className="formInputSmall" id='bedrooms' value={bedrooms} onChange={onMutate} min={1} max={80} required />
             </div>
             <div>
               <label className="formLabel">Bathrooms</label>
-              <input type="number" className="formInputSmall" id='bathrooms' value={bathrooms} onChange={onMutate} min='1' max='80' required />
+              <input type='number' className="formInputSmall" id='bathrooms' value={bathrooms} onChange={onMutate} min={1} max={80} required />
             </div>
           </div>
 
@@ -210,7 +323,8 @@ function CreateListing() {
           <p className="imageInfo">The first image will be the cover (max 6).</p>
           <input type="file" className='formInputFile'
             id='image' onChange={onMutate} max='6'
-            min='1' accept='.jpg, .png, .jpeg' multiple required />
+            min='1' accept='.jpg, .png, .jpeg' multiple required
+          />
 
           <button type='submit' className='primaryButton createListingButton'>Create Listing</button>
         </form>
