@@ -5,6 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 import Spinner from '../components/Spinner';
 import shareIcon from '../assets/svg/shareIcon.svg';
+import { list } from 'firebase/storage';
 
 function Listing() {
   const [listing, setListing] = useState(null);
@@ -31,7 +32,51 @@ function Listing() {
   }
 
   return <main>
-    p.
+    {/* Slider goes here */}
+    <div className="shareIconDiv" onClick={async () => {
+
+      await navigator.clipboard.writeText(window.location.href);
+      setShareLinkCopied(true);
+
+      setTimeout(() => {
+        setShareLinkCopied(true);
+      }, 2000);
+    }}>
+      <img src={shareIcon} alt="" />
+    </div>
+    {shareLinkCopied && <p className='linkCopied'>Link Copied</p>}
+
+    <div className="listingDetails">
+      <p className="listingName">{listing.name} - ${listing.offer
+        ? listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        : listing.regularPricetoString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      }
+      </p>
+      <p className="listingLocation">{listing.location}</p>
+      <p className="listingType">For {listing.type}</p>
+      {listing.offer && (
+        <p className="discountPrice">$ {listing.regularPrice - listing.discountedPrice} discount</p>
+      )}
+
+      <ul className='listingDetailsList'>
+        <li>{listing.bedrooms > 1 ? `${listing.bedrooms} Bedrooms` : '1 Bedroom'}</li>
+        <li>{listing.bathrooms > 1 ? `${listing.bathrooms} Bathrooms` : '1 Bedroom'}</li>
+        <li>{listing.parking && 'Parking Spot'}</li>
+      </ul>
+
+      <p className="listingLocationTitle">Location</p>
+      {/* map goes here */}
+
+      {auth.currentUser?.uid !== listing.useRef && (
+        <Link to={`/contact/${listing.userRef}?listingName=${listing.name}&listingLocation=${listing.location}`} className='primaryButton'>Contact Landlord</Link>
+      )
+      }
+
+    </div>
+
+
+
+
   </main>;
 }
 
