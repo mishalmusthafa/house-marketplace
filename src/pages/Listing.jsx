@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { register } from 'swiper/element';
 import { getDoc, doc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 import Spinner from '../components/Spinner';
 import shareIcon from '../assets/svg/shareIcon.svg';
 import { list } from 'firebase/storage';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+register();
 
 function Listing() {
   const [listing, setListing] = useState(null);
@@ -17,6 +23,8 @@ function Listing() {
   const auth = getAuth();
   const params = useParams();
 
+  // const swiperElRef = useRef(null);
+
   useEffect(() => {
     const fetchListing = async () => {
       const docRef = doc(db, 'listings', params.listingId);
@@ -26,6 +34,8 @@ function Listing() {
     };
 
     fetchListing();
+
+
   }, [params.listingId, navigate]);
 
   if (loading) {
@@ -33,7 +43,16 @@ function Listing() {
   }
 
   return <main>
-    {/* Slider goes here */}
+    <Swiper pagination={{ clickable: true }} modules={[Pagination]} className="mySwiper">
+      {listing.imgUrls.map((url, index) => (
+        <SwiperSlide key={index}>
+          <Link to={`/category/sale/${params.listingId}/images`}>
+            <img src={url} alt="" />
+          </Link>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+    
     <div className="shareIconDiv" onClick={async () => {
 
       await navigator.clipboard.writeText(window.location.href);
