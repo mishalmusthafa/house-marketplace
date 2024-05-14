@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase.config';
 import { Pagination, Navigation, Zoom } from 'swiper/modules';
@@ -44,6 +44,36 @@ function Images() {
   if (loading) {
     return <Spinner />;
   }
+
+  // return (
+  //   <div className="swiperContainer">
+  //     <Swiper style={{
+  //       '--swiper-navigation-color': '#000',
+  //       '--swiper-pagination-color': '#000',
+  //     }} pagination={{
+  //       type: 'progressbar',
+  //     }}
+  //       navigation={true}
+  //       zoom={true}
+  //       modules={[Pagination, Navigation, Zoom]}
+  //       className="mySwiper swiper-slide-full-container">
+
+  //       {listing.imgUrls.map((url, index) => (
+  //         <SwiperSlide key={index}>
+  //           <div className="swiper-zoom-container ">
+  //             <img src={url} alt="" className='fullImage' />
+  //           </div>
+  //         </SwiperSlide>
+  //       ))}
+
+  //     </Swiper>
+
+  //     <div className="closeIconDiv" onClick={() => navigate(-1)}>
+  //       <img src={closeIcon} alt="" />
+  //     </div>
+  //   </div>
+
+  // );
 
   return (
     <div className="swiperContainer">
