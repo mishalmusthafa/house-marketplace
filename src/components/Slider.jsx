@@ -44,6 +44,7 @@ function Slider() {
       <Swiper pagination={{ clickable: true }} modules={[Pagination]} slidesPerView={1}>
         {listings.map(({ data, id }) => (
           <SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
+            
             <div className="swiperSlideDiv" style={{
               background: `url(${data.imgUrls[0]}) center no-repeat`,
               backgroundSize: 'cover',

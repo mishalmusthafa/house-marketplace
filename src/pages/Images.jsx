@@ -45,38 +45,8 @@ function Images() {
     return <Spinner />;
   }
 
-  // return (
-  //   <div className="swiperContainer">
-  //     <Swiper style={{
-  //       '--swiper-navigation-color': '#000',
-  //       '--swiper-pagination-color': '#000',
-  //     }} pagination={{
-  //       type: 'progressbar',
-  //     }}
-  //       navigation={true}
-  //       zoom={true}
-  //       modules={[Pagination, Navigation, Zoom]}
-  //       className="mySwiper swiper-slide-full-container">
-
-  //       {listing.imgUrls.map((url, index) => (
-  //         <SwiperSlide key={index}>
-  //           <div className="swiper-zoom-container ">
-  //             <img src={url} alt="" className='fullImage' />
-  //           </div>
-  //         </SwiperSlide>
-  //       ))}
-
-  //     </Swiper>
-
-  //     <div className="closeIconDiv" onClick={() => navigate(-1)}>
-  //       <img src={closeIcon} alt="" />
-  //     </div>
-  //   </div>
-
-  // );
-
   return (
-    <div className="swiperContainer">
+    <div>
       <Swiper style={{
         '--swiper-navigation-color': '#000',
         '--swiper-pagination-color': '#000',
@@ -104,6 +74,7 @@ function Images() {
     </div>
 
   );
+
 
 }
 
