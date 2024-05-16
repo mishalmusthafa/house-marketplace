@@ -71,6 +71,10 @@ function Profile() {
     }
   };
 
+  const onEdit = (listingId) => {
+    navigate(`/edit-listing/${listingId}`);
+  };
+
   useEffect(() => {
     const fetchListings = async () => {
       const listingsRef = collection(db, 'listings');
@@ -148,7 +152,7 @@ function Profile() {
           <p className='listingText'>Your Listitngs</p>
           <ul className="listingList">
             {listings.map((listing) => (
-              <ListingItem key={listing.id} listing={listing.data} id={listing.id} onDelete={() => onDelete(listing.id)} />
+              <ListingItem key={listing.id} listing={listing.data} id={listing.id} onDelete={() => onDelete(listing.id)} onEdit={() => onEdit(listing.id)} />
             ))}
           </ul>
         </>
