@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { collection, getDocs, query, where, orderBy, limit, startAfter, } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
-import { list } from 'firebase/storage';
+
 import ListingItem from '../components/ListingItem';
 
 function Offers() {
@@ -12,9 +11,6 @@ function Offers() {
   const [listings, setListings] = useState(null);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
   const [listingsCompleted, setListingsCompleted] = useState(false);
-
-
-  const params = useParams();
 
   useEffect(() => {
     const fetchListings = async () => {

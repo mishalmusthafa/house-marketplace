@@ -34,9 +34,6 @@ function Profile() {
     navigate('/');
   };
 
-
-
-
   const onSubmit = async () => {
     try {
       if (auth.currentUser.displayName !== name) {
@@ -99,7 +96,7 @@ function Profile() {
     };
 
     fetchListings();
-  }, []);
+  }, [auth.currentUser.uid]);
 
   if (loading) {
     return <Spinner />;
